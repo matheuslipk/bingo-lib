@@ -15,11 +15,11 @@ export default class Card {
       this.id = makeid(5);
       this.name = "";
       this.balls = [
-        ...Card.generateColCard(this.id, 'B'),
-        ...Card.generateColCard(this.id, 'I'),
-        ...Card.generateColCard(this.id, 'N'),
-        ...Card.generateColCard(this.id, 'G'),
-        ...Card.generateColCard(this.id, 'O'),
+        ...Card.generateColCard('B'),
+        ...Card.generateColCard('I'),
+        ...Card.generateColCard('N'),
+        ...Card.generateColCard('G'),
+        ...Card.generateColCard('O'),
       ];
     }
   }
@@ -36,6 +36,33 @@ export default class Card {
 
   getBallsByRow(row:number):BallInterface[]{
     return this.balls.filter(b => b.row === row)
+  }
+
+  getBallsByDiagonal(d:0|1):BallInterface[]{
+    if(d===0){
+      return this.balls.filter(b => {
+        if( (b.colum==="B" && b.row===0) || 
+            (b.colum==="I" && b.row===1) ||
+            (b.colum==="N" && b.row===2) || 
+            (b.colum==="G" && b.row===3) ||
+            (b.colum==="O" && b.row===4)
+          ){
+          return true
+        } 
+      })
+    }
+
+    return this.balls.filter(b => {
+      if( (b.colum==="O" && b.row===0) || 
+          (b.colum==="G" && b.row===1) ||
+          (b.colum==="N" && b.row===2) || 
+          (b.colum==="I" && b.row===3) ||
+          (b.colum==="B" && b.row===4)
+        ){
+        return true
+      } 
+    })
+    
   }
 
   getBallById(id:string):BallInterface | undefined {
@@ -60,6 +87,22 @@ export default class Card {
     return true
   }
 
+  isCollMarked(colum:ColumType):boolean{
+    return this.getBallsByColum(colum).every(b => b.is_marked)
+  }
+
+  isRowMarked(row:number):boolean{
+    return this.getBallsByRow(row).every(b => b.is_marked)
+  }
+
+  isDiagonalMarked(d:0|1):boolean{
+    return this.getBallsByDiagonal(d).every(b => b.is_marked)
+  }
+
+  isFullMarked():boolean{
+    return this.balls.every(b => b.is_marked)
+  }
+
   toObject():CardInterface{
     return {
       id: this.id,
@@ -68,7 +111,7 @@ export default class Card {
     }
   }
 
-  private static generateColCard(card_id:string, colum:ColumType) {
+  private static generateColCard(colum:ColumType) {
     const balls:BallInterface[] = [];
     let indexColum=0;
     if (colum === 'B') {
@@ -95,7 +138,6 @@ export default class Card {
       if (!Card.valueExistInColum(newValue, balls)) {
         balls.push(
           newBall({
-            card_id,
             colum,
             row: position,
             value: newValue,

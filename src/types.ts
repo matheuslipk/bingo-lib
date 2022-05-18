@@ -8,7 +8,6 @@ export interface CardInterface {
 
 export interface BallInterface {
   id: string
-  card_id: string
   colum: ColumType
   row:number
   value: number

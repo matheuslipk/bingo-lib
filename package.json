@@ -1,7 +1,8 @@
 {
-  "name": "bingo-lib",
+  "name": "bingo-utils-lib",
   "version": "0.0.1",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matheuslipk/bingo.git"
@@ -10,7 +11,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon --watch 'src/' --exec 'ts-node src/index.ts' -e ts",
-    "build": "tsc"
+    "prepublish": "tsc"
   },
   "devDependencies": {
     "@types/nodemon": "^1.19.1",

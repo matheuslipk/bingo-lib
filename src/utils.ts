@@ -5,14 +5,12 @@ export function getRandomInt(min=0, max=75) {
 }
 
 export const newBall = ({
-  card_id,
   colum,
   row,
   value,
   is_marked = false,
 }:Omit<BallInterface, "id">):BallInterface => ({
   id: makeid(),
-  card_id,
   colum,
   row,
   value,

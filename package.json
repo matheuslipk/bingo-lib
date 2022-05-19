@@ -1,8 +1,11 @@
 {
-  "name": "bingo",
+  "name": "bingo-lib",
   "version": "0.0.1",
   "main": "src/index.ts",
-  "repository": "https://github.com/matheuslipk/bingo",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matheuslipk/bingo.git"
+  },
   "author": "Matheus Araújo",
   "license": "MIT",
   "scripts": {
@@ -15,5 +18,13 @@
     "ts-node": "^10.7.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.4"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/matheuslipk/bingo/issues"
+  },
+  "homepage": "https://github.com/matheuslipk/bingo#readme",
+  "keywords": [
+    "bingo"
+  ],
+  "description": ""
 }

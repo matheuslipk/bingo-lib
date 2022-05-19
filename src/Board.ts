@@ -24,23 +24,34 @@ export default class Card {
     }
   }
 
+  clear(){
+    this.getAllBalls().map(b => {
+      b.is_marked = false
+    })
+  }
+
+  getAllBalls(){
+    return this.balls
+  }
+
   getBall(colum:ColumType, row:number):BallInterface|undefined{
-    return this.balls.find(
+    return this.getAllBalls().find(
       (element) => element.row === row && element.colum === colum,
     );
   }
 
   getBallsByColum(colum:ColumType):BallInterface[]{
-    return this.balls.filter(b => b.colum===colum)
+    return this.getAllBalls().filter(b => b.colum===colum)
   }
 
   getBallsByRow(row:number):BallInterface[]{
-    return this.balls.filter(b => b.row === row)
+    return this.getAllBalls().filter(b => b.row === row)
   }
 
   getBallsByDiagonal(d:0|1):BallInterface[]{
+    const balls = this.getAllBalls()
     if(d===0){
-      return this.balls.filter(b => {
+      return balls.filter(b => {
         if( (b.colum==="B" && b.row===0) || 
             (b.colum==="I" && b.row===1) ||
             (b.colum==="N" && b.row===2) || 
@@ -52,7 +63,7 @@ export default class Card {
       })
     }
 
-    return this.balls.filter(b => {
+    return balls.filter(b => {
       if( (b.colum==="O" && b.row===0) || 
           (b.colum==="G" && b.row===1) ||
           (b.colum==="N" && b.row===2) || 
@@ -66,7 +77,7 @@ export default class Card {
   }
 
   getBallById(id:string):BallInterface | undefined {
-    return this.balls.find((element) => element.id === id);
+    return this.getAllBalls().find((element) => element.id === id);
   }
 
   setMarkedBallById(ballId:string):boolean{
@@ -99,9 +110,46 @@ export default class Card {
     return this.getBallsByDiagonal(d).every(b => b.is_marked)
   }
 
-  isFullMarked():boolean{
-    return this.balls.every(b => b.is_marked)
+  heveAnyRowMarked():boolean{
+    if(this.isRowMarked(0)) return true
+    if(this.isRowMarked(1)) return true
+    if(this.isRowMarked(2)) return true
+    if(this.isRowMarked(3)) return true
+    if(this.isRowMarked(4)) return true
+
+    return false
   }
+
+  heveAnyColMarked():boolean{
+    if(this.isCollMarked("B")) return true
+    if(this.isCollMarked("I")) return true
+    if(this.isCollMarked("N")) return true
+    if(this.isCollMarked("G")) return true
+    if(this.isCollMarked("O")) return true
+
+    return false
+  }
+
+  heveAnyDiaginalMarked():boolean{
+    if(this.isDiagonalMarked(0)) return true
+    if(this.isDiagonalMarked(1)) return true
+
+    return false
+  }
+
+  isFullMarked():boolean{
+    return this.getAllBalls().every(b => b.is_marked)
+  }
+
+  getAmountMarked(){
+    return this.getAllBalls().reduce((previos, current) => {
+      if(current.is_marked) return previos + 1
+      return previos
+    }, 0)
+  }
+
+  
+  
 
   toObject():CardInterface{
     return {

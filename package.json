@@ -1,5 +1,5 @@
 {
-  "name": "bingo-utils-lib",
+  "name": "bingo-lib",
   "version": "0.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/matheuslipk/bingo#readme",
   "keywords": [
-    "bingo"
+    "bingo",
+    "bingo-lib"
   ],
   "description": ""
 }

@@ -1,10 +1,10 @@
 import { getRandomInt, makeid, newBall } from "./utils";
-import { BallInterface, CardInterface, ColumType } from "./types";
+import { BallInterface, BallsCardV2Interface, CardInterface, ColumType } from "./types";
 
 export default class Card {
   private id: string;
   private name:string;
-  private balls:BallInterface[];
+  private balls: BallsCardV2Interface
 
   constructor(card?:CardInterface) {
     if (card) {
@@ -14,79 +14,69 @@ export default class Card {
     } else {
       this.id = makeid(5);
       this.name = "";
-      this.balls = [
-        ...Card.generateColCard('B'),
-        ...Card.generateColCard('I'),
-        ...Card.generateColCard('N'),
-        ...Card.generateColCard('G'),
-        ...Card.generateColCard('O'),
-      ];
+      this.balls = {
+        B: Card.generateColCard("B"),
+        I: Card.generateColCard("I"),
+        N: Card.generateColCard("N"),
+        G: Card.generateColCard("G"),
+        O: Card.generateColCard("O")
+      }
     }
   }
 
   clear(){
-    this.getAllBalls().map(b => {
-      b.is_marked = false
-    })
+    this.getAllBalls().B.map(b => b.is_marked = false)
+    this.getAllBalls().I.map(b => b.is_marked = false)
+    this.getAllBalls().N.map(b => b.is_marked = false)
+    this.getAllBalls().G.map(b => b.is_marked = false)
+    this.getAllBalls().O.map(b => b.is_marked = false)
   }
+
 
   getAllBalls(){
     return this.balls
   }
 
   getBall(colum:ColumType, row:number):BallInterface|undefined{
-    return this.getAllBalls().find(
-      (element) => element.row === row && element.colum === colum,
+    return this.getAllBalls()[colum].find(
+      (element) => element.row === row,
     );
   }
 
   getBallsByColum(colum:ColumType):BallInterface[]{
-    return this.getAllBalls().filter(b => b.colum===colum)
+    return this.getAllBalls()[colum]
   }
 
   getBallsByRow(row:number):BallInterface[]{
-    return this.getAllBalls().filter(b => b.row === row)
+    return [
+      this.getAllBalls().B.find(b=>b.row===row) as BallInterface,
+      this.getAllBalls().I.find(b=>b.row===row) as BallInterface,
+      this.getAllBalls().N.find(b=>b.row===row) as BallInterface,
+      this.getAllBalls().G.find(b=>b.row===row) as BallInterface,
+      this.getAllBalls().O.find(b=>b.row===row) as BallInterface,
+    ]
   }
 
   getBallsByDiagonal(d:0|1):BallInterface[]{
     const balls = this.getAllBalls()
     if(d===0){
-      return balls.filter(b => {
-        if( (b.colum==="B" && b.row===0) || 
-            (b.colum==="I" && b.row===1) ||
-            (b.colum==="N" && b.row===2) || 
-            (b.colum==="G" && b.row===3) ||
-            (b.colum==="O" && b.row===4)
-          ){
-          return true
-        } 
-      })
+      return [
+        balls.B.find(b=>b.row===0) as BallInterface,
+        balls.I.find(b=>b.row===1) as BallInterface,
+        balls.N.find(b=>b.row===2) as BallInterface,
+        balls.G.find(b=>b.row===3) as BallInterface,
+        balls.O.find(b=>b.row===4) as BallInterface,
+      ]
     }
 
-    return balls.filter(b => {
-      if( (b.colum==="O" && b.row===0) || 
-          (b.colum==="G" && b.row===1) ||
-          (b.colum==="N" && b.row===2) || 
-          (b.colum==="I" && b.row===3) ||
-          (b.colum==="B" && b.row===4)
-        ){
-        return true
-      } 
-    })
+    return [
+      balls.B.find(b=>b.row===4) as BallInterface,
+      balls.I.find(b=>b.row===3) as BallInterface,
+      balls.N.find(b=>b.row===2) as BallInterface,
+      balls.G.find(b=>b.row===1) as BallInterface,
+      balls.O.find(b=>b.row===0) as BallInterface,
+    ]
     
-  }
-
-  getBallById(id:string):BallInterface | undefined {
-    return this.getAllBalls().find((element) => element.id === id);
-  }
-
-  setMarkedBallById(ballId:string):boolean{
-    const ball = this.getBallById(ballId)
-    if(!ball){
-      return false
-    }
-    ball.is_marked = true
-    return true
   }
 
   setMarkedBall(colum:ColumType, row:number, isMarked=true):boolean{
@@ -138,18 +128,32 @@ export default class Card {
   }
 
   isFullMarked():boolean{
-    return this.getAllBalls().every(b => b.is_marked)
+    return (
+      this.getAllBalls().B.every(b => b.is_marked) &&
+      this.getAllBalls().I.every(b => b.is_marked) &&
+      this.getAllBalls().N.every(b => b.is_marked) &&
+      this.getAllBalls().G.every(b => b.is_marked) &&
+      this.getAllBalls().O.every(b => b.is_marked)
+    )
+  }
+
+  getBallsArray(){
+    const balls = this.getAllBalls()
+    return [
+      ...balls.B,
+      ...balls.I,
+      ...balls.N,
+      ...balls.G,
+      ...balls.O,
+    ]
   }
 
   getAmountMarked(){
-    return this.getAllBalls().reduce((previos, current) => {
+    return this.getBallsArray().reduce((previos, current) => {
       if(current.is_marked) return previos + 1
       return previos
     }, 0)
   }
-
-  
-  
 
   toObject():CardInterface{
     return {

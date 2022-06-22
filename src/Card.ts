@@ -88,11 +88,25 @@ export default class Card {
     return true
   }
 
-  isCollMarked(colum:ColumType):boolean{
+  isCollMarked(colum:ColumType, ignoreBallCenter=false):boolean{
+    if(ignoreBallCenter){
+      return this.getBallsByColum(colum).every((b, i) => {
+        if(i===2) return true
+
+        return b.is_marked
+      })
+    }
     return this.getBallsByColum(colum).every(b => b.is_marked)
   }
 
-  isRowMarked(row:number):boolean{
+  isRowMarked(row:number, ignoreBallCenter=false):boolean{
+    if(ignoreBallCenter){
+      return this.getBallsByRow(row).every((b, i) => {
+        if(i===2) return true
+
+        return b.is_marked
+      })
+    }
     return this.getBallsByRow(row).every(b => b.is_marked)
   }
 
@@ -100,40 +114,40 @@ export default class Card {
     return this.getBallsByDiagonal(d).every(b => b.is_marked)
   }
 
-  heveAnyRowMarked():boolean{
+  haveAnyRowMarked(ignoreBallCenter=false):boolean{
     if(this.isRowMarked(0)) return true
     if(this.isRowMarked(1)) return true
-    if(this.isRowMarked(2)) return true
+    if(this.isRowMarked(2, ignoreBallCenter)) return true
     if(this.isRowMarked(3)) return true
     if(this.isRowMarked(4)) return true
 
     return false
   }
 
-  heveAnyColMarked():boolean{
+  haveAnyColMarked(ignoreBallCenter=false):boolean{
     if(this.isCollMarked("B")) return true
     if(this.isCollMarked("I")) return true
-    if(this.isCollMarked("N")) return true
+    if(this.isCollMarked("N", ignoreBallCenter)) return true
     if(this.isCollMarked("G")) return true
     if(this.isCollMarked("O")) return true
 
     return false
   }
 
-  heveAnyDiaginalMarked():boolean{
+  haveAnyDiaginalMarked():boolean{
     if(this.isDiagonalMarked(0)) return true
     if(this.isDiagonalMarked(1)) return true
 
     return false
   }
 
-  isFullMarked():boolean{
+  isFullMarked(ignoreBallCenter = false):boolean{
     return (
-      this.getAllBalls().B.every(b => b.is_marked) &&
-      this.getAllBalls().I.every(b => b.is_marked) &&
-      this.getAllBalls().N.every(b => b.is_marked) &&
-      this.getAllBalls().G.every(b => b.is_marked) &&
-      this.getAllBalls().O.every(b => b.is_marked)
+      this.isCollMarked("B", ignoreBallCenter) &&
+      this.isCollMarked("I", ignoreBallCenter) &&
+      this.isCollMarked("N", ignoreBallCenter) &&
+      this.isCollMarked("G", ignoreBallCenter) &&
+      this.isCollMarked("O", ignoreBallCenter)
     )
   }
 

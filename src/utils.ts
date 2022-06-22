@@ -104,7 +104,7 @@ export function isDiagonalMarked(balls:BallInterface[], d:0|1):boolean{
   return getBallsByDiagonal(balls, d).every(b => b.is_marked)
 }
 
-export function heveAnyRowMarked(balls:BallInterface[]):boolean{
+export function haveAnyRowMarked(balls:BallInterface[]):boolean{
   if(isRowMarked(balls, 0)) return true
   if(isRowMarked(balls, 1)) return true
   if(isRowMarked(balls, 2)) return true
@@ -114,7 +114,7 @@ export function heveAnyRowMarked(balls:BallInterface[]):boolean{
   return false
 }
 
-export function heveAnyColMarked(balls:BallInterface[]):boolean{
+export function haveAnyColMarked(balls:BallInterface[]):boolean{
   if(isCollMarked(balls, "B")) return true
   if(isCollMarked(balls, "I")) return true
   if(isCollMarked(balls, "N")) return true
@@ -124,7 +124,7 @@ export function heveAnyColMarked(balls:BallInterface[]):boolean{
   return false
 }
 
-export function heveAnyDiaginalMarked(balls:BallInterface[]):boolean{
+export function haveAnyDiaginalMarked(balls:BallInterface[]):boolean{
   if(isDiagonalMarked(balls, 0)) return true
   if(isDiagonalMarked(balls, 1)) return true
 
